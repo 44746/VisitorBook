@@ -15,7 +15,7 @@ class UserMenu(QMainWindow):
 		self.btnOut = QPushButton("Sign Out")
 		
 		self.logo = QLabel()
-		self.logo.setPixmap(QPixmap("logo.jpg"))
+		self.logo.setPixmap(QPixmap("logo.png"))
 		
 		
 		self.btnIn.clicked.connect(self.signIn)
