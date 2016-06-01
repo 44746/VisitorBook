@@ -4,6 +4,7 @@ import sys
 from Database import *
 import datetime
 from Message import *
+import os
 
 class InSign(QMainWindow):
 	def __init__(self,parent):
@@ -25,12 +26,16 @@ class InSign(QMainWindow):
 		self.PopulateEmployeeComboBox()
 		self.btnSignIn = QPushButton("Sign in")
 		self.btnCancel = QPushButton("Cancel")
+		self.btnTC = QPushButton("T&C")
+		self.labelTC = QLabel("I agree to the Terms & Conditions:")
+		self.tick =QCheckBox()
 		
 		self.VLayoutMAIN = QVBoxLayout()
 		self.VLayout1 = QVBoxLayout()
 		self.VLayout2 = QVBoxLayout()
 		self.HLayout1 = QHBoxLayout()
 		self.HLayout2 = QHBoxLayout()
+		self.HLayout3 = QHBoxLayout()
 		
 		self.VLayout1.addWidget(self.labelF)
 		self.VLayout1.addWidget(self.labelS)
@@ -43,8 +48,12 @@ class InSign(QMainWindow):
 		self.HLayout1.addLayout(self.VLayout1)
 		self.HLayout1.addLayout(self.VLayout2)
 		self.HLayout2.addWidget(self.btnCancel)
+		self.HLayout2.addWidget(self.btnTC)
 		self.HLayout2.addWidget(self.btnSignIn)
+		self.HLayout3.addWidget(self.labelTC)
+		self.HLayout3.addWidget(self.tick)
 		self.VLayoutMAIN.addLayout(self.HLayout1)
+		self.VLayoutMAIN.addLayout(self.HLayout3)
 		self.VLayoutMAIN.addLayout(self.HLayout2)
 		self.widget = QWidget()
 		self.widget.setLayout(self.VLayoutMAIN)
@@ -52,6 +61,7 @@ class InSign(QMainWindow):
 		
 		self.btnSignIn.clicked.connect(self.btnSignIn_pushed)
 		self.btnCancel.clicked.connect(self.btnCancel_pushed)
+		self.btnTC.clicked.connect(self.btnTC_pushed)
 	
 	
 	
@@ -63,8 +73,12 @@ class InSign(QMainWindow):
 			name= name+(employee[2])
 			
 			self.EmployeeCombo.addItem(name)
+	
+	def btnTC_pushed(self):
+		os.startfile("text.txt")
 		
 	def btnSignIn_pushed(self):
+	
 		indexEmployee = self.EmployeeCombo.currentIndex()
 		employees = g_database.GetAllEmployees()
 		employee = employees[indexEmployee]
@@ -131,19 +145,27 @@ class InSign(QMainWindow):
 						self.error.show()
 						self.error.raise_()	
 			if reg_valid == True:
-				g_database.AddVisitor(forename,surname,registration,employee,inDate,inTime,outTime)
-				self.parent.show()
-				self.parent.raise_()
+					if self.tick.isChecked():
+						g_database.AddVisitor(forename,surname,registration,employee,inDate,inTime,outTime)
+						self.parent.show()
+						self.parent.raise_()
 		
-				self.message=Message(self,"Please see a Receptionist to obtain your Visitor Pass")
-				self.message.show()
-				self.message.raise_()
-				self.close()
+						self.message=Message(self,"Please see a Receptionist to obtain your Visitor Pass")
+						self.message.show()
+						self.message.raise_()
+						self.close()
+		
+					else:
+						self.error = Message(self,"Agree to T&C")
+						self.error.show()
+						self.error.raise_()
+				
 		else:
 			self.error = Message(self,"Please enter data in every field")
 			self.error.show()
 			self.error.raise_()
-		
+	
+			
 	def btnCancel_pushed(self):
 		self.parent.show()
 		self.close()
