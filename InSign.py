@@ -72,9 +72,10 @@ class InSign(QMainWindow):
 		name= name+(employee[1][0])+ " "
 		name= name+(employee[2])
 		employee = name
-		time = datetime.datetime.now().time()
+		time = datetime.datetime.now()
 		inTime =time.strftime('%H:%M')
 		outTime = "N/A"
+		inDate = time.strftime('%d/%m/%Y')
 		
 		
 		forename = self.forename.text()
@@ -130,7 +131,7 @@ class InSign(QMainWindow):
 						self.error.show()
 						self.error.raise_()	
 			if reg_valid == True:
-				g_database.AddVisitor(forename,surname,registration,employee,inTime,outTime)
+				g_database.AddVisitor(forename,surname,registration,employee,inDate,inTime,outTime)
 				self.parent.show()
 				self.parent.raise_()
 		

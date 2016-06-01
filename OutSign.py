@@ -45,7 +45,7 @@ class OutSign(QMainWindow):
 		term = self.searchTerm.text()
 		termFound = False
 		for visitor in visitors:
-			if term == visitor[2] and visitor[6] == "N/A":
+			if term == visitor[2] and visitor[7] == "N/A":
 				name = ""
 				name= name + (visitor[1]) + " "
 				name = name + (visitor[2])

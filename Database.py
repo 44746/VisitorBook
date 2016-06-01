@@ -11,6 +11,7 @@ class Database:
 			 surname text,
 			 reg text,
 			 whom text,
+			 date text,
 			 inTime text,
 			 outTime text,
 			 primary Key(VisitorID))"""
@@ -41,10 +42,10 @@ class Database:
 			employees = cursor.fetchall()
 			return employees
 		
-	def AddVisitor(self,forename,surname,reg,whom,inTime,outTime):
+	def AddVisitor(self,forename,surname,reg,whom,date,inTime,outTime):
 		with sqlite3.connect(self._db_name) as db:
 				cursor = db.cursor()
-				sql = "insert into Visitor(VisitorID,forename,surname,reg,whom,inTime,outTime) values ((SELECT max(VisitorID) FROM Visitor)+1,'{0}', '{1}', '{2}','{3}','{4}','{5}')".format(forename,surname,reg,whom,inTime,outTime)
+				sql = "insert into Visitor(VisitorID,forename,surname,reg,whom,date,inTime,outTime) values ((SELECT max(VisitorID) FROM Visitor)+1,'{0}', '{1}', '{2}','{3}','{4}','{5}','{6}')".format(forename,surname,reg,whom,date,inTime,outTime)
 				cursor.execute(sql)
 				db.commit()
 	def AddEmployee(self,forename,surname):

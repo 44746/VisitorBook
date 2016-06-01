@@ -2,6 +2,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import sys
 from Database import *
+import datetime
 
 class InBuilding(QMainWindow):
 	def __init__(self,parent):
@@ -28,13 +29,15 @@ class InBuilding(QMainWindow):
 		self.setCentralWidget(self.widget)
 				
 	def refreshTable(self):
+		time = datetime.datetime.now()
+		inDate = time.strftime('%d/%m/%Y')
 		entries = g_database.GetAllEntries()
 		self.table.setRowCount(len(entries))
 		self.table.setColumnCount(7) 
-		self.table.setHorizontalHeaderLabels(["ID","Forename","Surname","Reg","Visiting","Time In","Time Out"])
+		self.table.setHorizontalHeaderLabels(["ID","Forename","Surname","Reg","Visiting","Date","Time In","Time Out"])
 		row = -1
 		for entry in entries:
-			if entry[6] == "N/A":
+			if entry[7] == "N/A" and entry[5] == inDate:
 				column = 0
 				row += 1
 				for field in entry:
