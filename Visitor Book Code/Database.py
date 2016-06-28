@@ -2,8 +2,9 @@ import sqlite3
 class Database:
 	def __init__(self,db_name):
 		self._db_name=db_name
+		#Running the CreateDatabase function
 		self.CreateDatabase()
-	
+	#Creating tables with all relevant variables
 	def CreateDatabase(self):
 		sql = """create table if not exists Visitor
 			 (VisitorID integer,
@@ -15,13 +16,16 @@ class Database:
 			 inTime text,
 			 outTime text,
 			 primary Key(VisitorID))"""
+		#Running the execute_sql function passing in the sql	 
 		self.execute_sql(sql)
 		
 		sql ="""create table if not exists Employee
 			 (EmployeeID integer,
 			 forename text,
 			 surname text,
+			 department text,
 			 primary Key(EmployeeID))"""
+		#Running the execute_sql function passing in the sql	 
 		self.execute_sql(sql)	 
 	def execute_sql(self, sql):
 		with sqlite3.connect(self._db_name) as db:
@@ -48,10 +52,10 @@ class Database:
 				sql = "insert into Visitor(VisitorID,forename,surname,reg,whom,date,inTime,outTime) values ((SELECT max(VisitorID) FROM Visitor)+1,'{0}', '{1}', '{2}','{3}','{4}','{5}','{6}')".format(forename,surname,reg,whom,date,inTime,outTime)
 				cursor.execute(sql)
 				db.commit()
-	def AddEmployee(self,forename,surname):
+	def AddEmployee(self,forename,surname,department):
 		with sqlite3.connect(self._db_name) as db:
 				cursor = db.cursor()
-				sql = "insert into Employee(EmployeeID,forename,surname) values ((SELECT max(EmployeeID) FROM Employee)+1,'{0}', '{1}')".format(forename,surname)
+				sql = "insert into Employee(EmployeeID,forename,surname,department) values ((SELECT max(EmployeeID) FROM Employee)+1,'{0}', '{1}','{2}')".format(forename,surname,department)
 				cursor.execute(sql)
 				db.commit()
 	def DeleteEmployee(self,employeeID):
